@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -52,7 +13,7 @@
       align-items: center;
       min-height: 100vh;
       background: #000;
-      font-family: Arial, sans-serif;
+      font-family: 'Poppins', Arial, sans-serif;
       color: #fff;
       text-align: center;
       overflow: hidden;
@@ -63,58 +24,104 @@
       left: 0;
       width: 100%;
       height: 100%;
+      z-index: -2;
+    }
+    .garden-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at top, #2ecc71, #1a472a 60%, #000 100%);
+      opacity: 0.6;
       z-index: -1;
     }
     .container {
-      background: rgba(0, 0, 0, 0.7);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-      max-width: 600px;
+      background: rgba(0, 0, 0, 0.75);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      max-width: 650px;
       width: 90%;
       z-index: 1;
+      animation: float 4s ease-in-out infinite;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
     }
     h1 {
-      font-size: 2.5em;
+      font-size: 3em;
       margin-bottom: 20px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      text-shadow: 2px 2px 6px #ff4d6d, 0 0 25px #2ecc71;
+      background: linear-gradient(90deg, #ff4d6d, #ffcc00, #2ecc71, #3498db);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 6s linear infinite;
     }
     .code-box {
-      background: #1e1e1e;
+      background: #111;
       padding: 15px;
-      border-radius: 5px;
+      border-radius: 10px;
       font-family: 'Courier New', monospace;
-      font-size: 1em;
+      font-size: 1.1em;
       color: #0f0;
-      word-wrap: break-word;
       margin-bottom: 20px;
+      box-shadow: inset 0 0 10px #2ecc71;
+      max-width: 100%;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
     .copy-btn {
-      background: #4CAF50;
+      background: linear-gradient(45deg, #ff4d6d, #ffcc00, #2ecc71);
       color: white;
       border: none;
-      padding: 10px 20px;
-      font-size: 1em;
-      border-radius: 5px;
+      padding: 12px 24px;
+      font-size: 1.1em;
+      font-weight: bold;
+      border-radius: 30px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
     .copy-btn:hover {
-      background: #45a049;
+      transform: scale(1.08);
+      box-shadow: 0 0 20px #ffcc00;
     }
     .copy-btn:active {
-      background: #3d8b40;
+      transform: scale(0.95);
+      box-shadow: 0 0 10px #2ecc71;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+    .flower {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ff4d6d, #ff1e4d);
+      animation: bloom 5s infinite ease-in-out;
+    }
+    @keyframes bloom {
+      0%, 100% { transform: scale(0.8) rotate(0deg); }
+      50% { transform: scale(1.2) rotate(180deg); }
     }
   </style>
 </head>
 <body>
   <canvas id="stars"></canvas>
+  <div class="garden-bg"></div>
   <div class="container">
     <h1>GROW A GARDEN SCRIPT 🍓</h1>
     <div class="code-box" id="code">
       loadstring(game:HttpGet("https://raw.githubusercontent.com/Anirudhapillai/Grow-A-Garden-scripts/refs/heads/main/Protected_8687616688892576.lua.txt"))()
     </div>
-    <button class="copy-btn" onclick="copyCode()">Copy Code</button>
+    <button class="copy-btn" onclick="copyCode()">🌱 Copy Script</button>
   </div>
 
   <script>
@@ -142,7 +149,7 @@
 
     function initStars() {
       stars = [];
-      for (let i = 0; i < 200; i++) {
+      for (let i = 0; i < 250; i++) {
         stars.push(createStar());
       }
     }
@@ -163,25 +170,22 @@
     }
     animate();
 
-    // Copy code function with fallback
+    // Copy code
     function copyCode() {
       const code = document.getElementById('code').innerText;
       if (navigator.clipboard && window.isSecureContext) {
-        // Use modern clipboard API in secure contexts
         navigator.clipboard.writeText(code).then(() => {
-          alert('Code copied to clipboard!');
+          alert('🌱 Script copied to clipboard!');
         }).catch(err => {
           console.error('Clipboard API failed: ', err);
           fallbackCopy(code);
         });
       } else {
-        // Fallback for non-secure contexts
         fallbackCopy(code);
       }
     }
 
     function fallbackCopy(text) {
-      // Create a temporary textarea element
       const textarea = document.createElement('textarea');
       textarea.value = text;
       textarea.style.position = 'fixed';
@@ -190,13 +194,25 @@
       textarea.select();
       try {
         document.execCommand('copy');
-        alert('Code copied to clipboard!');
+        alert('🌱 Script copied to clipboard!');
       } catch (err) {
         console.error('Fallback copy failed: ', err);
-        alert('Failed to copy code. Please select and copy manually.');
+        alert('Failed to copy script. Please copy manually.');
       }
       document.body.removeChild(textarea);
     }
+
+    // Flower spawning effect
+    function spawnFlower() {
+      const flower = document.createElement('div');
+      flower.className = 'flower';
+      flower.style.left = Math.random() * window.innerWidth + 'px';
+      flower.style.top = Math.random() * window.innerHeight + 'px';
+      document.body.appendChild(flower);
+      setTimeout(() => flower.remove(), 7000);
+    }
+    setInterval(spawnFlower, 1200);
   </script>
 </body>
 </html>
+
