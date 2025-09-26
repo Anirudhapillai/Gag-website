@@ -119,7 +119,7 @@
   <div class="container">
     <h1>GROW A GARDEN SCRIPT 🍓</h1>
     <div class="code-box" id="code">
-      loadstring(game:HttpGet("https://raw.githubusercontent.com/Anirudhapillai/Grow-A-Garden-scripts/refs/heads/main/Protected_8687616688892576.lua.txt"))()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/Anirudhapillai/Grow-a-garden-script/refs/heads/main/Growgarden2script.txt"))() 
     </div>
     <button class="copy-btn" onclick="copyCode()">🌱 Copy Script</button>
   </div>
