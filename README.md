@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GROW A GARDEN SCRIPT ðŸ“</title>
+  <title>GROW A GARDEN SCRIPT 🍓</title>
   <style>
     body {
       margin: 0;
@@ -117,11 +117,11 @@
   <canvas id="stars"></canvas>
   <div class="garden-bg"></div>
   <div class="container">
-    <h1>GROW A GARDEN SCRIPT ðŸ“</h1>
+    <h1>GROW A GARDEN SCRIPT 🍓</h1>
     <div class="code-box" id="code">
       loadstring(game:HttpGet("https://raw.githubusercontent.com/Anirudhapillai/Grow-a-garden-script/refs/heads/main/Growgarden2script.txt"))() 
     </div>
-    <button class="copy-btn" onclick="copyCode()">ðŸŒ± Copy Script</button>
+    <button class="copy-btn" onclick="copyCode()">🌱 Copy Script</button>
   </div>
 
   <script>
@@ -175,7 +175,7 @@
       const code = document.getElementById('code').innerText;
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(code).then(() => {
-          alert('ðŸŒ± Script copied to clipboard!');
+          alert('🌱 Script copied to clipboard!');
         }).catch(err => {
           console.error('Clipboard API failed: ', err);
           fallbackCopy(code);
@@ -194,7 +194,7 @@
       textarea.select();
       try {
         document.execCommand('copy');
-        alert('ðŸŒ± Script copied to clipboard!');
+        alert('🌱 Script copied to clipboard!');
       } catch (err) {
         console.error('Fallback copy failed: ', err);
         alert('Failed to copy script. Please copy manually.');
@@ -215,3 +215,4 @@
   </script>
 </body>
 </html>
+
